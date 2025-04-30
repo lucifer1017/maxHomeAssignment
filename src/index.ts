@@ -26,8 +26,8 @@ const getNewRobotHeading=(currentHeading:Heading,rotation:'L'|'R'):Heading=>{
     return headings[newIndex];
 }
 
-const getNewPotentialRobotPosition=(currentPosition:RobotPosition):RobotPosition=>{
-    let {x,y,heading}=currentPosition;
+const getNewPotentialRobotPosition=(currentRobotPosition:RobotPosition):RobotPosition=>{
+    let {x,y,heading}=currentRobotPosition;
 
     switch(heading){
         case "N":
@@ -45,6 +45,49 @@ const getNewPotentialRobotPosition=(currentPosition:RobotPosition):RobotPosition
     }
     return {x,y,heading};
 }
+
+const processInstruction=(currentRobotState:RobotPosition,instruction:Instruction,boundary:PlateauBoundaryCordinates):RobotPosition=>{
+    if(instruction==='L'||instruction==='R'){
+        const newRobotHeading=getNewRobotHeading(currentRobotState.heading,instruction);
+        return {...currentRobotState,heading:newRobotHeading};
+    }
+    else{
+        const potentialNextState=getNewPotentialRobotPosition(currentRobotState);
+
+        if(
+            potentialNextState.x>=0 &&
+            potentialNextState.y>=0 &&
+            potentialNextState.x<=boundary.maxX &&
+            potentialNextState.y<=boundary.maxY
+        )
+        {
+            return potentialNextState;
+        }
+        else{
+            return currentRobotState; // basically we do not allow robot to fall of the subsurface;
+
+        }
+    }
+
+}
+
+const executeInstructions=(initialRobotState:RobotPosition,instructions:string,boundary:PlateauBoundaryCordinates):RobotPosition=>{
+    let currentRobotState={...initialRobotState};
+
+    for(const currentInstruction of instructions){
+        if(currentInstruction==='L'||currentInstruction==='R'||currentInstruction==='M'){
+            const instruction=currentInstruction;
+            currentRobotState=processInstruction(currentRobotState,instruction,boundary);
+        }
+        else{
+            continue;
+        }
+    }
+    return currentRobotState;
+}
+
+
+
 
 
 
