@@ -146,8 +146,8 @@ async function main() {
     const maxX = parseInt(plateauDimensions[0], 10);
     const maxY = parseInt(plateauDimensions[1], 10);
 
-    if (isNaN(maxX) || isNaN(maxY)) {
-         console.error(`Error: Invalid plateau boundary coordinates. Expected numbers, received "${plateauDimensions[0]}" and "${plateauDimensions[1]}".`);
+    if (isNaN(maxX) || isNaN(maxY) || !Number.isInteger(maxX) || !Number.isInteger(maxY)) {
+         console.error(`Error: Invalid plateau boundary coordinates. Expected integers, received "${plateauDimensions[0]}" and "${plateauDimensions[1]}".`);
          process.exit(1);
     }
 
@@ -178,8 +178,8 @@ async function main() {
         const y = parseInt(positionParts[1], 10);
         const headingChar = positionParts[2];
 
-        if (isNaN(x) || isNaN(y)) {
-            console.error(`Error: Invalid robot position coordinates on line ${i + 2}. Expected numbers, received "${positionParts[0]}" and "${positionParts[1]}". Skipping robot.`);
+        if (isNaN(x) || isNaN(y) || !Number.isInteger(x) || !Number.isInteger(y)) {
+            console.error(`Error: Invalid robot position coordinates on line ${i + 2}. Expected integers, received "${positionParts[0]}" and "${positionParts[1]}". Skipping robot.`);
             continue;
         }
 
